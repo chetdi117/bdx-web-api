@@ -32,7 +32,12 @@ export class CategoryService {
     category.name = categoryFrm.name;
     category.description = categoryFrm.description;
     category.createDate = new Date();
-    return this.categoryRepository.save(category);
+    category.userId = 1;
+    try {
+      return this.categoryRepository.save(category);
+    } catch (error) {
+      throw new Error('Error creating category');
+    }
   }
 
   async updateCategory(
@@ -49,7 +54,16 @@ export class CategoryService {
     return this.categoryRepository.save(category);
   }
 
-  async deleteCategory(id: number): Promise<void> {
-    await this.categoryRepository.delete(id);
+  async deleteCategory(id: number): Promise<Category> {
+    try {
+      const category = await this.categoryRepository.findOneBy({ id });
+      if (!category) {
+        throw new Error('Category not found');
+      }
+      await this.categoryRepository.delete(id);
+      return category;
+    } catch (error) {
+      throw new Error('Error deleting category');
+    }
   }
 }

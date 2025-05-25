@@ -2,24 +2,35 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostModule } from './post/post.module';
-import { UserController } from './user/user.controller';
+
+import { UserModule } from './user/user.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
-      username: 'your_username',
-      password: 'your_password',
-      database: 'your_database',
+      port: 5532,
+      username: 'postgres',
+      password: '',
+      database: 'bdsdb',
       autoLoadEntities: true, // Automatically load entities
-      synchronize: true, // Automatically sync database schema (disable in production)
+      synchronize: false, // Automatically sync database schema (disable in production)
     }),
-    PostModule,
+    // TypeOrmModule.forFeature([
+    //   User,
+    //   Post,
+    //   Category,
+    //   PostType,
+    //   Role,
+    //   Permission,
+    //   RolePermission,
+    // ]),
+    UserModule,
+    CategoryModule,
   ],
-  controllers: [AppController, UserController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

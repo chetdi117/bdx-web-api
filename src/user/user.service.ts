@@ -77,13 +77,32 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  async updateUser(id: number, user: User): Promise<User> {
+  async updateUser(
+    id: number,
+    userFrm: Partial<RegisterUserFrm>,
+  ): Promise<User> {
     const existingUser = await this.userRepository.findOneBy({ id });
     if (!existingUser) {
       throw new Error('User not found');
     }
-    user.updateDate = new Date();
-    return this.userRepository.save({ ...existingUser, ...user });
+    let passWord = existingUser.password;
+    if (userFrm.password) {
+      passWord = await this.hashString.hashPassword(userFrm.password);
+    }
+    const updateUser: User = {
+      ...existingUser,
+      email: userFrm.email || existingUser.email,
+      password: passWord,
+      fullName: userFrm.fullName || existingUser.fullName,
+      phone: userFrm?.phone || existingUser.phone,
+      address: userFrm?.address || existingUser.address,
+      district: userFrm.district || existingUser.district,
+      ward: userFrm.ward || existingUser.ward,
+      city: userFrm.city || existingUser.city,
+      updateDate: new Date(),
+    };
+
+    return this.userRepository.save(updateUser);
   }
 
   async deleteUser(id: number): Promise<number> {
@@ -93,5 +112,13 @@ export class UserService {
     }
     await this.userRepository.delete(id);
     return id;
+  }
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    const existingUser = await this.userRepository.findOneBy({ email });
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+    return existingUser;
   }
 }

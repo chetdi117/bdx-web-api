@@ -58,30 +58,27 @@ export class Post {
   @Column({ nullable: true })
   endDate!: Date;
 
-  @Column()
-  postTypeId!: number;
-
-  @Column()
-  categoryId!: number;
-
-  @Column()
-  userId!: number;
+  @Column({ nullable: true })
+  postTypeId!: number | null;
 
   @Column({ nullable: true })
   slug!: string;
 
   @ManyToOne(() => Category, (category) => category.posts, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
-  category!: Category;
+  category!: Category | null;
 
   @ManyToOne(() => User, (user) => user.posts, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
-  user!: User;
+  user!: User | null;
 
   @ManyToOne(() => PostType, (postType) => postType.posts, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
-  postType!: PostType;
+  postType!: PostType | null;
 }

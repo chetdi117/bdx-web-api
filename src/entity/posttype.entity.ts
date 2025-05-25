@@ -21,9 +21,6 @@ export class PostType {
   @Column()
   updateDate!: Date;
 
-  @Column({ nullable: true })
-  userId!: number;
-
   @ManyToOne(() => User, (user) => user.postTypes)
   user!: User;
 

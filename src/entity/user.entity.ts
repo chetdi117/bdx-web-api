@@ -13,20 +13,20 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 255 })
+  @Column({ name: 'fullname', length: 255 })
   fullName!: string;
 
-  @Column()
+  @Column({ name: 'email' })
   email!: string;
 
-  @Column()
+  @Column({ name: 'createdate' })
   createDate!: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'updatedate', nullable: true })
   updateDate!: Date;
 
   @Column({ nullable: true })
-  avatar!: Date;
+  avatar!: string;
 
   @Column()
   password!: string;

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -18,15 +19,19 @@ export class Category {
   @Column({ nullable: true })
   description!: string;
 
-  @Column()
+  @Column({ name: 'createdate' })
   createDate!: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'userid' })
+  userId: number;
+
+  @Column({ name: 'updatedate', nullable: true })
   updateDate!: Date;
 
   @OneToMany(() => Post, (post) => post.category) // One category can have many posts
   posts!: Post[];
 
   @ManyToOne(() => User, (user) => user.categories)
+  @JoinColumn({ name: 'userid' })
   user!: User;
 }
